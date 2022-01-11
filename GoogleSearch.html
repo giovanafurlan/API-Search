@@ -51,7 +51,7 @@
   hr {
     margin: 0;
     padding: 0;
-    
+
   }
 </style>
 
@@ -107,22 +107,20 @@
 
   <script>
     $('#searchTerm').on('change', function limpar() {
-
-      $("#table1 tr").remove();
+      // $("#table1 tr").remove();
       $("#table2 tr").remove();
-      $("#table3 tr").remove();
-      $("#table4 tr").remove();
-      $("#table5 tr").remove();
+      // $("#table3 tr").remove();
+      // $("#table4 tr").remove();
     })
 
     function consulta() {
       var sea = document.getElementById("searchTerm");
 
-      graph(sea.value);
-      image(sea.value);
+      // graph(sea.value);
       video(sea.value);
-      organic(sea.value);
-      related(sea.value);
+      // organic(sea.value);
+      // related(sea.value);
+      image(sea.value);
     }
 
     function graph(consulta) {
@@ -197,8 +195,8 @@
             var nome = linha.insertCell(l++);
             nome.innerHTML = linhaData.title;
 
-            var video = linha.insertCell(l++);
-            video.innerHTML = "<video src=" + linhaData.link + "></video>";
+            $("#table2").append("<video src=" + linhaData.link + "></video>");
+
           }
         }
       });
@@ -308,18 +306,11 @@
 
             var linhaData = data.images_results[i];
 
-            if (i == 0) {
-              var linha = tabela.insertRow(0);
-            } else {
-              var linha = tabela.insertRow();
-            }
+            $("#table5").append("<img src='" + linhaData.original + "' />");
 
-            //images_results
-
-            k = 0
-            var imagem = linha.insertCell(k++);
-            imagem.innerHTML = "<img src='" + linhaData.original + "' />";
-            // var img= getBase64Image(imagem); linhaData.original;
+            $('#searchTerm').on('change', function limpar() {
+              $("#table5").remove();
+            })
           }
         }
       });
