@@ -37,8 +37,7 @@
 
   }
 
-  img,
-  video {
+  img {
     max-width: 10vw;
   }
 
@@ -56,46 +55,34 @@
 </style>
 
 <body>
-  <div>
-    <div class="d-flex">
-      <input class="form-control me-2" id="searchTerm" type="search" placeholder="Digite aqui" aria-label="Search">
-      <button class="btn btn-outline-success" type="submit" onClick="consulta()">Buscar</button>
-    </div>
+  <div class="d-flex">
+    <input class="form-control me-2" id="searchTerm" type="search" placeholder="Digite aqui" aria-label="Search">
+    <button class="btn btn-outline-success" type="submit" onClick="consulta()">Buscar</button>
+  </div>
 
-    <div class="table-responsive">
-      <p>Informações</p>
-      <hr>
-      <table class="table align-middle" id="table1">
-      </table>
-    </div>
+  <p>Informações</p>
+  <hr>
+  <div id="table1">
+  </div>
 
-    <div class="table-responsive">
-      <p>Vídeos</p>
-      <hr>
-      <table class="table align-middle" id="table2">
-      </table>
-    </div>
+  <p>Vídeos</p>
+  <hr>
+  <div id="table2">
+  </div>
 
-    <div class="table-responsive">
-      <p>Resultados</p>
-      <hr>
-      <table class="table align-middle" id="table3">
-      </table>
-    </div>
+  <p>Resultados</p>
+  <hr>
+  <div id="table3">
+  </div>
 
-    <div class="table-responsive">
-      <p>Pesquisas Relacionadas</p>
-      <hr>
-      <table class="table align-middle" id="table4">
-      </table>
-    </div>
+  <p>Pesquisas Relacionadas</p>
+  <hr>
+  <div id="table4">
+  </div>
 
-    <div class="table-responsive">
-      <p>Imagens</p>
-      <hr>
-      <table class="table align-middle" id="table5">
-      </table>
-    </div>
+  <p>Imagens</p>
+  <hr>
+  <div id="table5">
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
@@ -107,19 +94,21 @@
 
   <script>
     $('#searchTerm').on('change', function limpar() {
-      // $("#table1 tr").remove();
-      $("#table2 tr").remove();
-      // $("#table3 tr").remove();
-      // $("#table4 tr").remove();
+      $("#table1").empty();
+      $("#table2").empty();
+      $("#table3").empty();
+      $("#table4").empty();
+      $("#table5").empty();
+
     })
 
     function consulta() {
       var sea = document.getElementById("searchTerm");
 
-      // graph(sea.value);
+      graph(sea.value);
       video(sea.value);
-      // organic(sea.value);
-      // related(sea.value);
+      organic(sea.value);
+      related(sea.value);
       image(sea.value);
     }
 
@@ -141,22 +130,15 @@
         success: function (data) {
 
           //knowledge_graph
-
-          var linha = tabela.insertRow(0);
           var linhaData = data.knowledge_graph;
 
-          var l = 0;
-          var nome = linha.insertCell(l++);
-          nome.innerHTML = linhaData.title;
+          $("#table1").append("<h4> " + linhaData.title + " </h4>");
 
-          var tipo = linha.insertCell(l++);
-          tipo.innerHTML = linhaData.type;
+          $("#table1").append("<p> " + linhaData.type + " </p>");
 
-          var link = linha.insertCell(l++);
-          link.innerHTML = linhaData.website;
+          $("#table1").append("<a href='" + linhaData.website + "' >" + linhaData.website + "</a><br>");
 
-          var link = linha.insertCell(l++);
-          link.innerHTML = linhaData.description;
+          $("#table1").append("<p> " + linhaData.description + " </p>");
         }
 
       });
@@ -168,7 +150,7 @@
 
       var url =
         "https://serpapi.com/search.json?q=" + consulta +
-        "&api_key=d707dfa608017f8efa6c6b7522c6a392d2b1e87e98cd5294edf9474b4ce302d4&location=State+of+Sao+Paulo%2C+Brazil&google_domain=google.com.br&hl=pt-br";
+        "&tbm=vid&hl=en&gl=us&api_key=6681352881f290db8ec410f05bc6b9567276022001ad7812884fbac446d342d9";
 
       var tabela = document.getElementById("table2");
 
@@ -181,21 +163,14 @@
 
           //inline_videos
 
-          for (var i = 0; i < data.inline_videos.length; i++) {
+          for (var i = 0; i < data.video_results.length; i++) {
 
-            var linhaData = data.inline_videos[i];
+            var linhaData = data.video_results[i];
 
-            if (a == 0) {
-              var linha = tabela.insertRow(0);
-            } else {
-              var linha = tabela.insertRow();
-            }
+            $("#table2").append("<h4> " + linhaData.title + " </h4>");
 
-            var l = 0;
-            var nome = linha.insertCell(l++);
-            nome.innerHTML = linhaData.title;
+            $("#table2").append("<video src=" + linhaData.link + " ></video>");
 
-            $("#table2").append("<video src=" + linhaData.link + "></video>");
 
           }
         }
@@ -224,21 +199,11 @@
           for (var i = 0; i < data.organic_results.length; i++) {
             var linhaData = data.organic_results[i];
 
-            if (i == 0) {
-              var linha = tabela.insertRow(0);
-            } else {
-              var linha = tabela.insertRow();
-            }
+            $("#table3").append("<h4>" + linhaData.title + "</h4>");
 
-            var l = 0;
-            var nome = linha.insertCell(l++);
-            nome.innerHTML = linhaData.title;
+            $("#table3").append("<a href='" + linhaData.link + "' >" + linhaData.link + "</a><br>");
 
-            var link = linha.insertCell(l++);
-            link.innerHTML = "<a href=" + linhaData.link + "/>";
-
-            var snippet = linha.insertCell(l++);
-            snippet.innerHTML = linhaData.snippet;
+            $("#table3").append("<p>" + linhaData.snippet + "</p>");
           }
         }
       });
@@ -267,18 +232,9 @@
 
             var linhaData = data.related_searches[i];
 
-            if (i == 0) {
-              var linha = tabela.insertRow(0);
-            } else {
-              var linha = tabela.insertRow();
-            }
+            $("#table4").append("<h5>" + linhaData.query + "</h5>");
 
-            var l = 0;
-            var nome = linha.insertCell(l++);
-            nome.innerHTML = linhaData.query;
-
-            var link = linha.insertCell(l++);
-            link.innerHTML = linhaData.link;
+            $("#table4").append("<a href='" + linhaData.link + "' >" + linhaData.link + "</a><br>");
           }
         }
       });
@@ -306,11 +262,7 @@
 
             var linhaData = data.images_results[i];
 
-            $("#table5").append("<img src='" + linhaData.original + "' />");
-
-            $('#searchTerm').on('change', function limpar() {
-              $("#table5").remove();
-            })
+            $("#table5").append("<img src='" + linhaData.original + " ' />");
           }
         }
       });
